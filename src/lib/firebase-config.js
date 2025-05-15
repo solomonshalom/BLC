@@ -1,12 +1,12 @@
 // ENV configs for firebase (Super Important!)
 
 export const FIREBASE_CONFIG = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_MESSENGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_APP_ID
+  apiKey: "AIzaSyBL4FKAG_mofaxZiG2q0j3543Ims_80GaA",
+  authDomain: "jrle-216c1.firebaseapp.com",
+  projectId: "jrle-216c1",
+  storageBucket: "jrle-216c1.appspot.com",
+  messagingSenderId: "21313569188",
+  appId: "1:21313569188:web:648724b2e6d6cb8bdd4131",
 }
 
 export default FIREBASE_CONFIG
