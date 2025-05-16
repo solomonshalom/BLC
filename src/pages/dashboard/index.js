@@ -59,26 +59,11 @@ export default function Dashboard() {
   return (
     <>
       <Header>
-
         <Link href="/dashboard/list">
-          Reading List
+          <a>Reading List</a>
         </Link>
-
-       {/*Adds a new Link to the Contact Page*/}
-
-        <Link href="https://linktr.ee/bublr">
-          Contact
-        </Link>
-
-        {/* Profile settings */}
-        <Link href="#" onClick={() => console.log('Profile clicked')}>
-          <ProfileSettingsModal Trigger={() => 'Profile'} uid={user?.uid} />
-        </Link>
-
-          {/* Sign out */}
-        <Link href="#" onClick={() => auth.signOut()}>
-        Sign Out
-        </Link>
+        <ProfileSettingsModal Trigger={() => 'Profile'} uid={user?.uid} />
+        <button onClick={() => auth.signOut()}>Sign Out</button>
       </Header>
 
       {userError || postsError ? (
