@@ -5,9 +5,7 @@ const Header = props => (
   <header
     css={css`
       display: flex;
-      margin-bottom: 3.5rem;
-      margin-right: 4rem;
-      display: -webkit-box;
+      margin-bottom: 5rem;
 
       a:first-of-type {
         margin-left: auto;
@@ -26,12 +24,9 @@ const Header = props => (
         transition: all 200ms ease;
       }
 
-      a:hover {
-        color: var(--grey-3);
-      }
-
+      a:hover,
       button:hover {
-        color: #402745;
+        color: var(--grey-3);
       }
 
       button:last-of-type {
