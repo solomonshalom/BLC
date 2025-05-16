@@ -3,34 +3,24 @@ import Head from 'next/head'
 import { ThemeProvider } from 'next-themes'
 import { Global, css } from '@emotion/react'
 import { IdProvider } from '@radix-ui/react-id'
-import { useRouter } from 'next/router'
+import { AppProps } from 'next/app';
+
 
 const App = ({ Component, pageProps }) => {
   const getLayout = Component.getLayout || (page => page)
-  const router = useRouter()
 
   return (
     <>
       <Head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="theme-color" content="#FCFCFC" media="(prefers-color-scheme: light)" />
-        <meta name="theme-color" content="#171717" media="(prefers-color-scheme: dark)" />
-        <link rel="icon" href="/favicon.ico" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
           href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap"
           rel="stylesheet"
         />
-        {/* Open Graph default fallback values */}
-        {!router.pathname.includes('[') && (
-          <>
-            <meta property="og:site_name" content="Bublr" />
-            <meta property="twitter:site" content="@bublr" />
-          </>
-        )}
+
+          <link rel="manifest" href="https://www.justice.rest/justicerest.webmanifest" />
+          <meta name="mobile-web-app-capable" content="yes" />
+
+<script defer src="https://cloud.umami.is/script.js" data-website-id="a0cdb368-20ae-4630-8949-ac57917e2ae3"></script>
       </Head>
       <Global
         styles={css`
@@ -44,7 +34,7 @@ const App = ({ Component, pageProps }) => {
 
           [data-theme='dark'] {
             --grey-1: #171717;
-            --grey-2: #2e2e2e;
+            --grey-2: #3a3939;
             --grey-4: #c7c7c7;
             --grey-5: #fcfcfc;
           }
@@ -63,6 +53,7 @@ const App = ({ Component, pageProps }) => {
 
           body {
             background: var(--grey-1);
+            font-family: 'Inter', sans-serif;
             font-family: 'Inter', sans-serif;
           }
 
@@ -103,6 +94,18 @@ const App = ({ Component, pageProps }) => {
 
           .ProseMirror img.ProseMirror-selectednode {
             box-shadow: 0 0 1rem var(--grey-2);
+          }
+
+          /* Style for text selection */
+          ::selection {
+            background-color: #301a35;
+            color: white; /* Text color when selected */
+          }
+      
+          /* Preventing background color change when text is deselected */
+          ::-moz-selection {
+            background-color: #301a35;
+            color: white;
           }
         `}
       />
