@@ -1,11 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import Link from 'next/link'
 import { css } from '@emotion/react'
-/*
-&:hover {
-    background: var(--grey-4);
-  }
-*/
+
 const buttonStyles = css`
   display: block;
   border: none;
@@ -31,19 +27,7 @@ const buttonStyles = css`
     color: var(--grey-2);
   }
 `
-/*
-  &:hover {
-    background: var(--grey-1);
-    border: 1px solid var(--grey-3);
-  }
-*/
 
-/*
-    &:hover {
-      background: var(--grey-1);
-      border: 1px solid var(--grey-3);
-    }
-*/
 const outlineButtonStyles = css`
   ${buttonStyles}
 
@@ -53,7 +37,7 @@ const outlineButtonStyles = css`
 
   &:hover {
     background: var(--grey-1);
-    border: 1px solid #402745;
+    border: 1px solid var(--grey-3);
   }
 
   &:disabled {
@@ -62,7 +46,7 @@ const outlineButtonStyles = css`
 
     &:hover {
       background: var(--grey-1);
-      border: 1px solid #402745;
+      border: 1px solid var(--grey-2);
     }
   }
 `
