@@ -1,14 +1,12 @@
 {
   "name": "bublr",
-  "version": "0.5.0",
-  "private": false,
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
-  },
-  "config": {
-    "legacy-peer-deps": true
+    "dev": "NODE_OPTIONS='--openssl-legacy-provider' next dev",
+    "build": "NODE_OPTIONS='--openssl-legacy-provider' next build",
+    "start": "NODE_OPTIONS='--openssl-legacy-provider' next start",
+    "lint": "next lint"
   },
   "dependencies": {
     "@emotion/react": "^11.4.0",
@@ -16,28 +14,29 @@
     "@radix-ui/react-icons": "^1.0.3",
     "@radix-ui/react-id": "^0.0.6",
     "@react-firebase/auth": "^0.2.10",
-    "@tiptap/extension-highlight": "^2.1.8",
-    "@tiptap/extension-image": "^2.0.0",
-    "@tiptap/extension-link": "^2.0.0",
-    "@tiptap/extension-placeholder": "^2.0.0",
-    "@tiptap/pm": "^2.0.0",
-    "@tiptap/react": "^2.0.0",
-    "@tiptap/starter-kit": "^2.0.0",
+    "@tiptap/extension-code-block-lowlight": "^2.1.0",
+    "@tiptap/extension-image": "^2.1.0",
+    "@tiptap/extension-link": "^2.1.0",
+    "@tiptap/extension-placeholder": "^2.1.0",
+    "@tiptap/extension-underline": "^2.1.0",
+    "@tiptap/react": "^2.1.0",
+    "@tiptap/starter-kit": "^2.1.0",
+    "axios": "^1.9.0",
     "firebase": "^8.7.1",
+    "gsap": "^3.13.0",
     "html-to-text": "^8.0.0",
-    "iconoir-react": "^6.11.0",
+    "lowlight": "^2.9.0",
     "modern-normalize": "^1.1.0",
-    "next": "^14.0.4",
+    "next": "11.0.1",
     "next-themes": "^0.0.15",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
     "react-firebase-hooks": "^3.0.4",
     "sanitize-html": "^2.4.0",
-    "tinykeys": "^1.2.0",
-    "typescript": "^4.2.0"
+    "tinykeys": "^1.2.0"
   },
   "devDependencies": {
-    "eslint": "7.32.0",
-    "eslint-config-next": "^13.4.13"
+    "eslint": "7.31.0",
+    "eslint-config-next": "11.0.1"
   }
 }

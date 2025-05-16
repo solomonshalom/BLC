@@ -32,6 +32,7 @@ function Editor({ user }) {
     name: '',
     displayName: '',
     about: '',
+    link: '',
     posts: [],
     photo: '',
     readingList: [],
@@ -79,8 +80,9 @@ function Editor({ user }) {
             }
           />
         </div>
+
         <div>
-          <StyledLabel htmlFor="profile-username">Name (*Please do not capitalize it)</StyledLabel>
+          <StyledLabel htmlFor="profile-username">Name</StyledLabel>
           <Input
             id="profile-username"
             type="text"
@@ -105,6 +107,21 @@ function Editor({ user }) {
               {usernameErr}
             </p>
           )}
+        </div>
+
+        <div>
+          <StyledLabel htmlFor="profile-link">Link</StyledLabel>
+          <Input
+            id="profile-link"
+            type="text"
+            value={clientUser.link || ''}
+            onChange={e =>
+              setClientUser(prevUser => ({
+                ...prevUser,
+                link: e.target.value,
+              }))
+            }
+          />
         </div>
 
         <div>
@@ -142,11 +159,8 @@ function Editor({ user }) {
         <a target="_blank" rel="noreferrer" href={`/${user.name}`}>
           bublr.life/{user.name}
         </a>
-          <br/>
-          <br/>
-          {/*It's our Lord and Saviour, Jesus Christ who helped us make it! It's not out of our own wisdom but it was provided by God!*/}
-        <p>Made w/ ❤️ near a 🌴</p>
       </p>
+
       <Button
         css={css`
           margin-left: auto;
@@ -157,6 +171,7 @@ function Editor({ user }) {
           user.name === clientUser.name &&
           user.displayName === clientUser.displayName &&
           user.about === clientUser.about &&
+          user.link === clientUser.link &&
           !usernameErr
         }
         onClick={async () => {
@@ -173,7 +188,7 @@ function Editor({ user }) {
                 'Username can only consist of letters (a-z,A-Z), numbers (0-9) and dashes (-).',
               )
               return
-            } else if (clientUser.name === 'dashboard 🕹️') {
+            } else if (clientUser.name === 'dashboard') {
               setUsernameErr('That username is reserved.')
               return
             }
@@ -245,16 +260,7 @@ export default function ProfileSettingsModal(props) {
           Change your profile details and make sure to hit save when you&apos;re
           done.
         </Dialog.Description>
-        <Dialog.Description
-          css={css`
-            margin: 1rem 0 0.5rem 0;
-            max-width: 20rem;
-            color: var(--grey-3);
-            font-size: 0.9rem;
-          `}
-        >
-        If logged in anonymous, make sure not to sign out as you will lose your access to the account
-        </Dialog.Description>
+
         <ProfileEditor uid={props.uid} />
 
         <Dialog.Close

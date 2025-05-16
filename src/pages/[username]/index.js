@@ -3,7 +3,6 @@ import Link from 'next/link'
 import Head from 'next/head'
 import { css } from '@emotion/react'
 import { htmlToText } from 'html-to-text'
-import { useEffect, useState } from 'react'
 
 import { truncate } from '../../lib/utils'
 import { getUserByName } from '../../lib/db'
@@ -11,33 +10,35 @@ import { getUserByName } from '../../lib/db'
 import meta from '../../components/meta'
 import Container from '../../components/container'
 
-function formatDate(date) {
-  const options = { day: 'numeric', month: 'long', year: 'numeric' };
-  return new Intl.DateTimeFormat('en-US', options).format(date);
-}
-
 export default function Profile({ user }) {
   return (
     <Container maxWidth="640px">
       <Head>
         {meta({
-          title: `${user.displayName} (@${user.name}) / Bublr`,
-          description: user.about,
+          title: `${user.displayName} (@${user.name}) | Bublr`,
+          description: user.about || `Check out ${user.displayName}'s writing on Bublr, an open-source community for writers.`,
           url: `/${user.name}`,
           image: user.photo,
+          keywords: `${user.displayName}, ${user.name}, writer, author, blog, writing`
         })}
         <link
           href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,600;1,400;1,600&display=swap"
           rel="stylesheet"
         />
+        <link rel="canonical" href={`https://bublr.life/${user.name}`} />
       </Head>
 
       <img
         src={user.photo}
-        alt="Profile picture"
+        alt={`${user.displayName}'s profile picture`}
+        width="80"
+        height="80"
+        loading="eager"
         css={css`
           width: 5rem;
+          height: 5rem;
           border-radius: 2.5rem;
+          object-fit: cover;
         `}
       />
       <h1
@@ -60,6 +61,27 @@ export default function Profile({ user }) {
       >
         {user.about}
       </p>
+
+      {user.link && (
+        <p
+          css={css`
+            margin-top: 1rem;
+            font-size: 1rem;
+          `}
+        >
+          <a 
+            href={user.link.startsWith('http') ? user.link : `https://${user.link}`} 
+            target="_blank" 
+            rel="noreferrer"
+            css={css`
+              color: var(--grey-4);
+              text-decoration: underline;
+            `}
+          >
+            {user.link}
+          </a>
+        </p>
+      )}
 
       <ul
         id="posts"
@@ -104,7 +126,7 @@ export default function Profile({ user }) {
                 }
               `}
             >
-              {formatDate(new Date(post.lastEdited))}
+              {new Date(post.lastEdited).toDateString()}
             </p>
 
             <Link href={`/${user.name}/${post.slug}`}>
@@ -136,6 +158,19 @@ export default function Profile({ user }) {
           </li>
         ))}
       </ul>
+      
+      {/* Person structured data */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{
+        __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Person",
+          "name": user.displayName,
+          "url": `https://bublr.life/${user.name}`,
+          "image": user.photo,
+          "description": user.about,
+          "sameAs": user.link ? (user.link.startsWith('http') ? user.link : `https://${user.link}`) : undefined
+        })
+      }} />
     </Container>
   )
 }
@@ -162,7 +197,7 @@ export async function getStaticProps({ params }) {
     user.posts = user.posts.filter(p => p.published)
     return {
       props: { user },
-      revalidate: 1,
+      revalidate: 60, // Revalidate at most once per minute
     }
   } catch (err) {
     console.log(err)

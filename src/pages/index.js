@@ -2,7 +2,6 @@
 import Head from 'next/head'
 import { css } from '@emotion/react'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import AnonymousLoginButton from '../components/AnonymousLoginButton';
 
 import firebase, { auth } from '../lib/firebase'
 import { setUser, userWithIDExists } from '../lib/db'
@@ -10,7 +9,22 @@ import { setUser, userWithIDExists } from '../lib/db'
 import meta from '../components/meta'
 import Spinner from '../components/spinner'
 import Container from '../components/container'
+import PeepWalk from '../components/PeepWalk'
 import Button, { LinkButton } from '../components/button'
+
+const dicebearStyles = [
+  'notionists-neutral',
+  'notionists',
+  'lorelei-neutral',
+  'lorelei',
+  'dylan',
+]
+
+function generateDiceBearAvatar(uid) {
+  const hash = uid.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0)
+  const style = dicebearStyles[hash % dicebearStyles.length]
+  return `https://api.dicebear.com/9.x/${style}/svg?seed=${uid}`
+}
 
 export default function Home() {
   const [user, loading, error] = useAuthState(auth)
@@ -27,24 +41,26 @@ export default function Home() {
   return (
     <div>
       <div
-css={css`
-                margin-top: 0rem;
-                margin-bottom: 1rem;
-                position: relative;
-                right: 1rem;
+        css={css`
+          margin-top: 0rem;
+          margin-bottom: 2.5rem;
 
-                @media (max-width: 500px) {
-                    margin-bottom: 1rem;
-                }
+          @media (max-width: 720px) {
+            margin-bottom: 10rem;
+          }
 
-              width: 120px;
-              height: 120px;
+          width: 2rem;
+          height: 2rem;
 
-              background-image: url('/images/logo-1.png');
-              background-position: center;
-              background-repeat: no-repeat;
-              background-size: contain;
-`}
+          background-image: url('/images/logo-dark.png');
+          background-position: center;
+          background-repeat: no-repeat;
+          background-size: 2rem;
+
+          html[data-theme='dark'] & {
+            background-image: url('/images/logo.png');
+          }
+        `}
       ></div>
       <h1
         css={css`
@@ -53,7 +69,7 @@ css={css`
           margin-bottom: 1.5rem;
         `}
       >
-        Bublr
+        An open-source, ultra-minimal community for writers, to write.
       </h1>
       <ul
         css={css`
@@ -73,9 +89,9 @@ css={css`
           }
         `}
       >
-        <li>A cozy corner in the internet</li>
-        <li>Be yourself, we won&apos;t judge</li>
-        <li>Meet other cool people!</li>
+        <li>No ads</li>
+        <li>No paywalls</li>
+        <li>Open-source</li>
       </ul>
       {loading ? (
         <Button>
@@ -87,7 +103,7 @@ css={css`
             display: flex;
           `}
         >
-          <LinkButton href="/dashboard">Dashboard 🕹️</LinkButton>
+          <LinkButton href="/dashboard">Dashboard</LinkButton>
           <Button
             css={css`
               margin-left: 1rem;
@@ -95,7 +111,7 @@ css={css`
             outline
             onClick={() => auth.signOut()}
           >
-            Sign Out 🚪🚶
+            Sign Out
           </Button>
         </div>
       ) : (
@@ -112,26 +128,57 @@ css={css`
               const googleAuthProvider = new firebase.auth.GoogleAuthProvider()
               auth.signInWithPopup(googleAuthProvider).then(async cred => {
                 let userExists = await userWithIDExists(cred.user.uid)
-                
                 if (!userExists) {
                   await setUser(cred.user.uid, {
                     name: cred.user.uid,
                     displayName: cred.user.displayName || 'Anonymous',
-                    about: 'hii',
+                    about: 'Nothing to say about you.',
                     posts: [],
-                    photo: cred.user.photoURL,
+                    photo: generateDiceBearAvatar(cred.user.uid),
                     readingList: [],
                   })
                 }
               })
             }}
           >
-            User ⛹️
+            Google Sign In
           </Button>
-          {/*Implementing an Avater functionality + Makes code much better! Praise, God (Couldn't have done it w/o him <3):D*/}
-          <AnonymousLoginButton />
+          <Button
+            onClick={() => {
+              const githubAuthProvider = new firebase.auth.GithubAuthProvider()
+              auth.signInWithPopup(githubAuthProvider).then(async cred => {
+                let userExists = await userWithIDExists(cred.user.uid)
+
+                console.log(cred.user)
+
+                if (!userExists) {
+                  await setUser(cred.user.uid, {
+                    name: cred.user.uid,
+                    displayName: cred.user.displayName || 'Anonymous',
+                    about: 'Nothing to say about you.',
+                    posts: [],
+                    photo: generateDiceBearAvatar(cred.user.uid),
+                    readingList: [],
+                  })
+                }
+              })
+            }}
+          >
+            GitHub Sign In
+          </Button>
         </div>
       )}
+      <div
+        css={css`
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          z-index: -1;
+        `}
+      >
+        <PeepWalk height="450px" width="100%" />
+      </div>
     </div>
   )
 }
@@ -141,12 +188,27 @@ Home.getLayout = function HomeLayout(page) {
     <Container maxWidth="420px">
       <Head>
         {meta({
-          title: 'Bublr',
+          title: 'Bublr - A Minimal Writing Community',
           description:
-            'An ultra-minimal platform to let your thoughts out~',
+            'Bublr is an open-source, ultra-minimal community for writers to share their thoughts, stories, and ideas without ads or paywalls.',
           url: '/',
-          image: '/images/socials.jpg',
+          image: '/images/socials.png',
         })}
+        <link rel="canonical" href="https://bublr.life/" />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "url": "https://bublr.life/",
+            "name": "Bublr",
+            "description": "An open-source, ultra-minimal community for writers to share their thoughts, stories, and ideas without ads or paywalls.",
+            "potentialAction": {
+              "@type": "SearchAction",
+              "target": "https://bublr.life/{search_term_string}",
+              "query-input": "required name=search_term_string"
+            }
+          })
+        }} />
       </Head>
       {page}
     </Container>

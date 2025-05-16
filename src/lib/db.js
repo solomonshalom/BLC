@@ -1,5 +1,47 @@
 import firebase, { firestore } from './firebase'
 
+// Function to get all users with published posts for sitemap generation
+export async function getAllUsersWithPublishedPosts() {
+  const usersSnapshot = await firestore.collection('users').get()
+  const users = []
+  
+  for (const userDoc of usersSnapshot.docs) {
+    const userData = userDoc.data()
+    if (userData.posts && userData.posts.length > 0) {
+      // Get all posts for this user
+      const postDocs = await Promise.all(
+        userData.posts.map(postId => firestore.collection('posts').doc(postId).get())
+      )
+      
+      // Filter to only published posts and extract necessary data
+      const publishedPosts = postDocs
+        .filter(postDoc => postDoc.exists && postDoc.data().published)
+        .map(postDoc => {
+          const postData = postDoc.data()
+          return {
+            id: postDoc.id,
+            slug: postData.slug,
+            lastEdited: postData.lastEdited,
+            title: postData.title // Include title for better SEO
+          }
+        })
+      
+      // Only include users who have at least one published post
+      if (publishedPosts.length > 0) {
+        users.push({
+          id: userDoc.id,
+          name: userData.name,
+          photo: userData.photo, // Include photo for image sitemap
+          displayName: userData.displayName, // Include displayName for better titles
+          posts: publishedPosts
+        })
+      }
+    }
+  }
+  
+  return users
+}
+
 export async function userWithIDExists(id) {
   const doc = await firestore.collection('users').doc(id).get()
   return doc.exists
